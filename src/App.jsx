@@ -22,7 +22,8 @@
 // ==============================
 import { useEffect, useMemo, useState } from 'react'
 
-const API_BASE = 'http://localhost:5174' // 🔁 points to our Node proxy
+// Use same-origin calls; Vite will proxy /api requests to the local server
+const API_BASE = '/api'
 
 export default function App() {
   // 🧱 Local component state – simple and explicit
@@ -48,7 +49,7 @@ export default function App() {
       setLoading(true)
       setError('')
       try {
-        const url = new URL('/api/structure', API_BASE)
+        const url = new URL(`${API_BASE}/structure`, window.location.origin)
         url.searchParams.set('owner', owner)
         url.searchParams.set('repo', repo)
         const res = await fetch(url.href)
@@ -74,7 +75,7 @@ export default function App() {
     setLoading(true)
     setError('')
     try {
-      const url = new URL('/api/contents', API_BASE)
+      const url = new URL(`${API_BASE}/contents`, window.location.origin)
       url.searchParams.set('owner', owner)
       url.searchParams.set('repo', repo)
       url.searchParams.set('topic', topic)
@@ -100,7 +101,7 @@ export default function App() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch(`${API_BASE}/api/ask`, {
+      const res = await fetch(`${API_BASE}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ owner, repo, question })
