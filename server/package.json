@@ -1,0 +1,11 @@
+{
+    "name": "deepwiki-mcp-proxy",
+    "type": "module",
+    "dependencies": {
+        "body-parser": "^1.20.2",
+      "ai": "^4.0.0-canary",          
+      "cors": "^2.8.5",
+      "express": "^4.19.2"
+    }
+  }
+  
