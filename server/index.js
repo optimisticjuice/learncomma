@@ -45,6 +45,26 @@ app.get('/api/structure', async (req, res) => {
   }
 })
 
+// 📄 GET /api/contents?owner=facebook&repo=react&topic=Component
+app.get('/api/contents', async (req, res) => {
+  try {
+    const { owner, repo, topic } = req.query
+    if (!owner || !repo || !topic) return res.status(400).json({ error: 'owner, repo, topic are required' })
+
+    const client = await getMcpClient()
+    const result = await client.tool.invoke({
+      server: { type: 'sse', url: 'https://mcp.deepwiki.com/sse' },
+      toolName: 'read_wiki_contents',
+      arguments: { owner, repo, topic },
+    })
+
+    res.json({ ok: true, data: result?.content ?? [] })
+  } catch (err) {
+    console.error('contents error', err)
+    res.status(500).json({ ok: false, error: err?.message || 'unknown error' })
+  }
+})
+
 // ❓ POST /api/ask  body: { owner, repo, question }
 app.post('/api/ask', async (req, res) => {
     try {
